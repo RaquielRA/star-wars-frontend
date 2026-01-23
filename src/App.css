@@ -1,42 +1,132 @@
-#root {
-  max-width: 1280px;
+:root {
+  --sw-yellow: #FFE81F;
+  --dark-bg: #121212;
+  --card-bg: #1e1e1e;
+  --text-main: #e0e0e0;
+}
+
+body {
+  background-image: url('./assets/wallhaven-kwvqxd.png');
+  
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  
+  margin: 0;
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+}
+
+.app-container {
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 40px 20px;
+  border-radius: 20px;
+  min-height: 90vh;
+}
+
+.header {
   text-align: center;
+  margin-bottom: 50px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.title {
+  font-size: 7rem;
+  letter-spacing: 5px;
+  color: var(--sw-yellow);
+  margin-bottom: 30px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.title span {
+  color: #fff;
+  font-weight: 300;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.search-box {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-.card {
-  padding: 2em;
+input {
+  flex: 1;
+  padding: 15px 20px;
+  border-radius: 30px;
+  border: 1px solid #333;
+  background: #222;
+  color: white;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
 }
 
-.read-the-docs {
-  color: #888;
+input:focus {
+  border-color: var(--sw-yellow);
 }
+
+button {
+  padding: 0 30px;
+  border-radius: 30px;
+  border: none;
+  background: var(--sw-yellow);
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+button:hover:not(:disabled) {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.grid-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+  padding-top: 20px;
+}
+
+.film-card {
+  background: var(--card-bg);
+  padding: 25px;
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s;
+  border: 1px solid #333;
+}
+
+.film-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--sw-yellow);
+}
+
+.card-decorator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background: var(--sw-yellow);
+}
+
+.film-card h2 {
+  font-size: 1.4rem;
+  margin: 0 0 10px 0;
+}
+
+.release-year {
+  background: rgba(255, 232, 31, 0.1);
+  color: var(--sw-yellow);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.error-message { color: #ff5252; margin-top: 15px; }

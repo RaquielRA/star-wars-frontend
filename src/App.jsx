@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import './App.css';
 
 const API_URL_BASE = 'http://localhost:8080';
+const ENDPOINT_PATH = '/api/films/search?title=';
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -8,34 +10,26 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const ENDPOINT_PATH = '/api/films/search?title=';
-
   const buscarFilmes = async () => {
     if (!searchTerm) {
-      setError("Por favor, digite um termo de busca.");
+      setError("Por favor, digite um título.");
       setResults(null);
       return;
     }
 
     setLoading(true);
     setError(null);
-    setResults(null);
 
-    const urlCompleta = API_URL_BASE + ENDPOINT_PATH + encodeURIComponent(searchTerm);
-    
     try {
+      const urlCompleta = `${API_URL_BASE}${ENDPOINT_PATH}${encodeURIComponent(searchTerm)}`;
       const resposta = await fetch(urlCompleta);
-      
-      if (!resposta.ok) {
-        throw new Error(`Erro HTTP! Status: ${resposta.status}`);
-      }
+
+      if (!resposta.ok) throw new Error(`Status: ${resposta.status}`);
 
       const dados = await resposta.json();
-      
-      setResults(dados.results); 
-
+      setResults(dados.results);
     } catch (err) {
-      setError(`❌ Erro ao conectar com o Backend: ${err.message}. Verifique se o Backend Java está ativo.`);
+      setError(`Erro ao conectar com o Backend: ${err.message}`);
       setResults([]);
     } finally {
       setLoading(false);
@@ -43,40 +37,42 @@ function App() {
   };
 
   return (
-    <div className="container" style={{ padding: '20px', fontFamily: 'Arial' }}>
-      <h1>Busca Flexível de Filmes Star Wars (React)</h1>
-      
-      <input
-        type="text"
-        placeholder="Digite parte do título (ex: menace)"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      <button onClick={buscarFilmes} disabled={loading}>
-        {loading ? 'Buscando...' : 'Buscar Filmes'}
-      </button>
+    <div className="app-container">
+      <header className="header">
+        <h1 className="title">STAR WARS <span>EXPLORER</span></h1>
+        <div className="search-box">
+          <input
+            type="text"
+            placeholder="Ex: A New Hope..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && buscarFilmes()}
+          />
+          <button onClick={buscarFilmes} disabled={loading}>
+            {loading ? '...' : 'BUSCAR'}
+          </button>
+        </div>
+        {error && <p className="error-message">{error}</p>}
+      </header>
 
-      <hr />
-
-      {}
-      {error && <p style={{ color: 'red', fontWeight: 'bold' }}>{error}</p>}
-      
-      {}
-      {results && results.length > 0 && (
-        <>
-          <h3>{results.length} Resultado(s) Encontrado(s)</h3>
-          <ul>
+      <main className="content">
+        {results && results.length > 0 ? (
+          <div className="grid-results">
             {results.map((filme, index) => (
-              <li key={index} style={{ borderBottom: '1px dotted #ccc', paddingBottom: '10px', marginBottom: '10px' }}>
-                <strong>Título:</strong> {filme.title}
-                <br />
-                <strong>Ano:</strong> {filme.release_date ? filme.release_date.substring(0, 4) : 'N/A'}
-              </li>
+              <div key={index} className="film-card">
+                <div className="card-decorator"></div>
+                <h2>{filme.title}</h2>
+                <span className="release-year">
+                  {filme.release_date ? filme.release_date.substring(0, 4) : 'N/A'}
+                </span>
+                <p>Que a força esteja com você.</p>
+              </div>
             ))}
-          </ul>
-        </>
-      )}
-      {results && results.length === 0 && <p>Nenhum filme encontrado.</p>}
+          </div>
+        ) : (
+          results && !loading && <p className="no-results">Nenhum filme encontrado.</p>
+        )}
+      </main>
     </div>
   );
 }
